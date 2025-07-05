@@ -6,9 +6,8 @@ public record UserRequestDTO(Long id,
                              String name,
                              String email,
                              String password,
-                             LocalDateTime createDate,
-                             double balance,
-                             double openingBalance,
-                             double salary,
-                             boolean userNotifications) {
+                             Double balance,
+                             Double openingBalance,
+                             Double salary,
+                             Boolean userNotifications) {
 }

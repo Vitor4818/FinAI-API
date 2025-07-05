@@ -36,19 +36,19 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserResponseDTO> postUser(UserRequestDTO dto){
+    public ResponseEntity<UserResponseDTO> postUser(@RequestBody  UserRequestDTO dto){
         User savedUser = userService.postUser(dto);
         return ResponseEntity.created(URI.create("/users/" + savedUser.getId())).build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UpdateUserDTO> putUser(@PathVariable Long id, UpdateUserDTO dto){
+    public ResponseEntity<UpdateUserDTO> putUser(@PathVariable Long id, @RequestBody  UpdateUserDTO dto){
         userService.putUser(id, dto);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(Long id){
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id){
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }

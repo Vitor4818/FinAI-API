@@ -7,9 +7,10 @@ public record UserResponseDTO(
         String name,
         String email,
         String password,
-        double openingBalance,
-        double salary,
-        boolean userNotifications
+        Double balance,
+        Double openingBalance,
+        Double salary,
+        Boolean userNotifications
 ) {
     public UserResponseDTO(User user) {
         this(
@@ -17,6 +18,7 @@ public record UserResponseDTO(
                 user.getName(),
                 user.getEmail(),
                 user.getPassword(),
+                user.getBalance(),
                 user.getOpeningBalance(),
                 user.getSalary(),
                 user.isUserNotifications()

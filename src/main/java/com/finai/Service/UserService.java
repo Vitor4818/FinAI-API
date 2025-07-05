@@ -27,7 +27,7 @@ public class UserService {
 
     //Retorna usuario por ID
     public UserResponseDTO getUserById(Long id){
-        return userRepository.findById(id).map(UserResponseDTO::new).orElseThrow(()-> new RuntimeException("Usuario não encontrado"));
+        return userRepository.findById(id).map(UserResponseDTO::new).orElseThrow(()-> new ResourceNotFoundException("Usuario não encontrado"));
     }
 
     //Cadastra usuario
