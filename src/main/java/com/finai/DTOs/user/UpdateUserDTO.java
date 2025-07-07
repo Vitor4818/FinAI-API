@@ -1,6 +1,4 @@
-package com.finai.DTOs;
-
-import java.time.LocalDateTime;
+package com.finai.DTOs.user;
 
 public record UpdateUserDTO(
                             Long id,

@@ -1,4 +1,4 @@
-package com.finai.DTOs;
+package com.finai.DTOs.user;
 
 import com.finai.Model.User;
 

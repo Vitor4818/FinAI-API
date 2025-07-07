@@ -1,7 +1,7 @@
 package com.finai.Model;
 
-import com.finai.DTOs.UpdateUserDTO;
-import com.finai.DTOs.UserRequestDTO;
+import com.finai.DTOs.user.UpdateUserDTO;
+import com.finai.DTOs.user.UserRequestDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
