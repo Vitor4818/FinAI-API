@@ -64,28 +64,71 @@ public class MovementService {
             return movementRepository.save(transaction);
     }
 
-    //Atualiza transação
     @Transactional
-    public void putMovement(Long id, UpdateMovementDTO dto){
-            User user = userRepository.findById(dto.user().getId()).orElseThrow(()-> new ResourceNotFoundException("Usuario não encontrado"));
-            PaymentMethod paymentMethod = PaymentMethod.fromId(dto.paymentMethodId());
-            MovementType movementType = MovementType.fromId(dto.movementTypeId());
-            Movement movement = movementRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Transação não encontrada"));
-            movement.update(dto);
+    public void putMovement(Long id, UpdateMovementDTO dto) {
+        // Busca o usuário
+        User user = userRepository.findById(dto.user().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
 
-            //FIX: Atualiza saldo do cliente
-            if (movementType.equals(MovementType.EXPENSE)){
-                user.setBalance(user.getBalance() +  );
+        // Busca a transação antiga
+        Movement movement = movementRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Transação não encontrada"));
+
+        // Dados antigos
+        PaymentMethod oldPaymentMethod = PaymentMethod.fromId(movement.getPaymentMethodId());
+        MovementType oldMovementType = MovementType.fromId(movement.getMovementTypeId());
+        double oldValue = movement.getValue();
+
+        // Dados novos
+        PaymentMethod newPaymentMethod = PaymentMethod.fromId(dto.paymentMethodId());
+        MovementType newMovementType = MovementType.fromId(dto.movementTypeId());
+        double newValue = dto.value();
+
+        //Desfaz impacto antigo se NÃO era cartão de crédito
+        if (oldPaymentMethod != PaymentMethod.CREDIT_CARD) {
+            if (oldMovementType == MovementType.EXPENSE) {
+                user.setBalance(user.getBalance() + oldValue); // devolve o gasto
+            } else {
+                user.setBalance(user.getBalance() - oldValue); // retira a receita
             }
-            movementRepository.save(movement);
+        }
+
+        //Atualiza transação com novos dados
+        movement.update(dto);
+
+        //Aplica impacto novo se NÃO é cartão de crédito
+        if (newPaymentMethod != PaymentMethod.CREDIT_CARD) {
+            if (newMovementType == MovementType.EXPENSE) {
+                user.setBalance(user.getBalance() - newValue); // aplica nova despesa
+            } else {
+                user.setBalance(user.getBalance() + newValue); // aplica nova receita
+            }
+        }
+
+        // Salva alterações
+        movementRepository.save(movement);
+        userRepository.save(user);
     }
 
     //Deleta transação
     @Transactional
     public void deleteMovement(Long id){
             Movement movement = movementRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Transação não encontrada"));
+            User user = userRepository.findById(movement.getUser().getId()).orElseThrow(()-> new ResourceNotFoundException("Usuario não encontrado"));
+            PaymentMethod paymentMethod = PaymentMethod.fromId(movement.getPaymentMethodId());
+            MovementType movementType = MovementType.fromId(movement.getMovementTypeId());
+
+            if (paymentMethod != PaymentMethod.CREDIT_CARD){
+                if (movementType.equals(MovementType.INCOME)){
+                    user.setBalance(user.getBalance() - movement.getValue());
+                }else if (movementType.equals(MovementType.EXPENSE)){
+                    user.setBalance(user.getBalance() + movement.getValue());
+                }
+                userRepository.save(user);
+            }
             movementRepository.deleteById(id);
-    }
+
+        }
 
 
 
