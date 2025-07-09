@@ -1,9 +1,9 @@
 package com.finai.Service;
 
 
-import com.finai.DTOs.UpdateUserDTO;
-import com.finai.DTOs.UserResponseDTO;
-import com.finai.DTOs.UserRequestDTO;
+import com.finai.DTOs.user.UpdateUserDTO;
+import com.finai.DTOs.user.UserResponseDTO;
+import com.finai.DTOs.user.UserRequestDTO;
 import com.finai.Exception.DataConflictException;
 import com.finai.Exception.ResourceNotFoundException;
 import com.finai.Model.User;

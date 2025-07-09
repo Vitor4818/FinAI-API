@@ -1,8 +1,8 @@
 package com.finai.Controller;
 
-import com.finai.DTOs.UpdateUserDTO;
-import com.finai.DTOs.UserRequestDTO;
-import com.finai.DTOs.UserResponseDTO;
+import com.finai.DTOs.user.UpdateUserDTO;
+import com.finai.DTOs.user.UserRequestDTO;
+import com.finai.DTOs.user.UserResponseDTO;
 import com.finai.Model.User;
 import com.finai.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserResponseDTO> postUser(@RequestBody  UserRequestDTO dto){
+    public ResponseEntity<Void> postUser(@RequestBody  UserRequestDTO dto){
         User savedUser = userService.postUser(dto);
         return ResponseEntity.created(URI.create("/users/" + savedUser.getId())).build();
     }

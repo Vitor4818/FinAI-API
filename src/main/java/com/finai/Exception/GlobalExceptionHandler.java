@@ -33,4 +33,15 @@ public class GlobalExceptionHandler {
     body.put("message", ex.getMessage());
     return new ResponseEntity<>(body, HttpStatus.CONFLICT);
 }
+
+@ExceptionHandler(insufficientBalance.class)
+    public ResponseEntity<Map<String, Object>> handleInsufficientBalance(insufficientBalance ex){
+    Map<String, Object> body = new HashMap<>();
+    body.put("timestamp", LocalDateTime.now());
+    body.put("status", HttpStatus.NOT_FOUND.value());
+    body.put("error", "Recurso não encontrado");
+    body.put("message", ex.getMessage());
+    return new ResponseEntity<>(body, HttpStatus.CONFLICT);
+}
+
 }
