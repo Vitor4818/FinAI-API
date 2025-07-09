@@ -94,7 +94,11 @@ public class MovementService {
         }
 
         //Atualiza transação com novos dados
+        if (newValue > user.getBalance() && newPaymentMethod != PaymentMethod.CREDIT_CARD){
+            throw new insufficientBalance("Saldo insuficiente");
+        }else {
         movement.update(dto);
+        }
 
         //Aplica impacto novo se NÃO é cartão de crédito
         if (newPaymentMethod != PaymentMethod.CREDIT_CARD) {
