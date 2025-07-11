@@ -1,4 +1,4 @@
-package com.finai.Model;
+package com.finai.Enums;
 
 public enum Category {
     GROCERIES(1L, MovementType.EXPENSE),

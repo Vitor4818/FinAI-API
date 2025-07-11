@@ -4,8 +4,12 @@ package com.finai.Service;
 import com.finai.DTOs.movement.MovementRequestDTO;
 import com.finai.DTOs.movement.MovementResponseDto;
 import com.finai.DTOs.movement.UpdateMovementDTO;
+import com.finai.Enums.Category;
+import com.finai.Enums.MovementType;
+import com.finai.Enums.PaymentMethod;
+import com.finai.Enums.Recurring;
 import com.finai.Exception.ResourceNotFoundException;
-import com.finai.Exception.insufficientBalance;
+import com.finai.Exception.InsufficientBalance;
 import com.finai.Model.*;
 import com.finai.Repository.MovementRepository;
 import com.finai.Repository.UserRepository;
@@ -52,7 +56,7 @@ public class MovementService {
 
         //Verifica se tem saldo o suficiente para a despesa. OBS: Permite saldo negativo para o cartão de crédito
         if (dto.value()>user.getBalance() && paymentMethod != PaymentMethod.CREDIT_CARD) {
-                throw new insufficientBalance("Saldo insuficiente!");
+                throw new InsufficientBalance("Saldo insuficiente!");
             }
             Movement transaction = new Movement(dto);
         if (movementType == MovementType.EXPENSE && paymentMethod != PaymentMethod.CREDIT_CARD){
@@ -95,7 +99,7 @@ public class MovementService {
 
         //Atualiza transação com novos dados
         if (newValue > user.getBalance() && newPaymentMethod != PaymentMethod.CREDIT_CARD){
-            throw new insufficientBalance("Saldo insuficiente");
+            throw new InsufficientBalance("Saldo insuficiente");
         }else {
         movement.update(dto);
         }
